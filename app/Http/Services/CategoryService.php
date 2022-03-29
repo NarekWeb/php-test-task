@@ -32,8 +32,15 @@ class CategoryService
         ]);
     }
 
-    public function delete(Category $category): bool
+    /**
+     * @throws \Exception
+     */
+    public function delete(Category $category): void
     {
-        return $category->delete();
+        if ($category->products()->count()) {
+            throw new \Exception('you can not delete a category that has a product');
+        }
+
+        $category->delete();
     }
 }
